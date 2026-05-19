@@ -461,23 +461,20 @@ html,body{
   display:flex;flex-direction:column;align-items:center;gap:8px;
 }
 .slot-label{
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;
-  font-size:clamp(.7rem,2.2vw,.85rem);
-  color:rgba(26,58,90,.95);
-  letter-spacing:.1em;
+  font-family:'Noto Serif TC',serif;
+  font-size:clamp(.75rem,2.2vw,.9rem);
+  color:#0A1E35;
+  letter-spacing:.05em;
   text-align:center;
-  font-weight:600;
-  text-shadow:0 1px 4px rgba(255,255,255,.8);
+  font-weight:900;
 }
 .slot-label-zh{
   font-family:'Noto Serif TC',serif;
-  font-size:clamp(.65rem,2vw,.78rem);
-  color:rgba(26,58,90,.85);
+  font-size:clamp(.7rem,2vw,.82rem);
+  color:#0A1E35;
   text-align:center;
-  margin-top:-4px;
-  font-weight:400;
-  text-shadow:0 1px 4px rgba(255,255,255,.8);
+  margin-top:2px;
+  font-weight:700;
 }
 
 .card-slot{
@@ -619,13 +616,11 @@ html,body{
 .reading-card-img.reversed img{transform:rotate(180deg);}
 
 .reading-card-label{
-  font-family:'Cormorant Garamond',serif;
-  font-style:italic;
+  font-family:'Noto Serif TC',serif;
   font-size:clamp(.72rem,2.2vw,.85rem);
-  color:rgba(26,58,90,.9);
-  letter-spacing:.08em;
-  font-weight:600;
-  text-shadow:0 1px 4px rgba(255,255,255,.7);
+  color:#0A1E35;
+  letter-spacing:.05em;
+  font-weight:900;
 }
 
 /* Card detail panel */
@@ -679,11 +674,18 @@ html,body{
   font-family:'Cormorant Garamond',serif;
   font-style:italic;
   font-size:.72rem;
-  color:#B05050;
+  color:#8B0000;
   letter-spacing:.08em;
   margin-top:4px;
+  font-weight:700;
+  -webkit-text-stroke: 2px white;
+  paint-order: stroke fill;
 }
-.card-detail-position.upright{color:#3A7A3A;}
+.card-detail-position.upright{
+  color:#1A5C1A;
+  -webkit-text-stroke: 2px white;
+  paint-order: stroke fill;
+}
 
 .card-detail-divider{
   height:1px;
@@ -1507,7 +1509,7 @@ function showReading() {
   rowEl.innerHTML = drawnCards.map(({card, reversed}, i) => {
     const revClass = reversed ? 'reversed' : '';
     const posLabel = reversed ? '逆位' : '正位';
-    const posColor = reversed ? 'var(--vintage-red)' : 'var(--forest-green)';
+    const posColor = reversed ? '#8B0000' : '#1A5C1A';
     return `
       <div class="reading-card-wrap" onclick="showCardDetail(${i})">
         <div class="reading-card-img ${revClass}">
@@ -1515,7 +1517,7 @@ function showReading() {
                onerror="this.parentNode.outerHTML='<div class=\'reading-card-img\'><div class=\'card-placeholder\' style=\'height:100%\'><div class=\'card-placeholder-name\'>${card.roman}<br>${card.zh}</div></div></div>'">
         </div>
         <div class="reading-card-label" style="color:rgba(212,168,67,.55)">${config[i].zh}</div>
-        <div class="reading-card-label" style="color:${posColor};font-size:.6rem">${posLabel}</div>
+        <div class="reading-card-label" style="color:${posColor};font-size:.75rem;font-weight:900">${posLabel}</div>
       </div>
     `;
   }).join('');
