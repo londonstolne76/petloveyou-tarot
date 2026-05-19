@@ -1445,7 +1445,7 @@ function drawNextCard() {
   if (!deckShuffled || drawnCount >= currentSpreadCount) return;
 
   const card = shuffledDeck[drawnCount];
-  const reversed = Math.random() < 0.35; // 35% chance reversed
+  const reversed = Math.random() < 0.1; // 10% chance reversed
   drawnCards.push({ card, reversed });
 
   // Fill slot
