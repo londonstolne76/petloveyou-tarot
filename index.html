@@ -1516,8 +1516,8 @@ function showReading() {
           <img src="${card.src}" alt="${card.zh}" 
                onerror="this.parentNode.outerHTML='<div class=\'reading-card-img\'><div class=\'card-placeholder\' style=\'height:100%\'><div class=\'card-placeholder-name\'>${card.roman}<br>${card.zh}</div></div></div>'">
         </div>
-        <div class="reading-card-label" style="color:rgba(212,168,67,.55)">${config[i].zh}</div>
-        <div class="reading-card-label" style="color:${posColor};font-size:.75rem;font-weight:900">${posLabel}</div>
+        <div class="reading-card-label" style="color:#8B0000;font-weight:900;font-family:'Noto Serif TC',serif;font-size:.78rem">${config[i].zh}</div>
+        <div class="reading-card-label" style="color:${posColor};font-size:.78rem;font-weight:900;font-family:'Noto Serif TC',serif">${posLabel}</div>
       </div>
     `;
   }).join('');
