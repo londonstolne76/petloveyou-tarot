@@ -1,1 +1,1 @@
-# petloveyou-tarot
+# yorkie-tarot
