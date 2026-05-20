@@ -376,11 +376,12 @@ html,body{
 }
 
 /* ═══════════════════════════════════════════════
-   PAGE 3 · DRAW
+   PAGE 3 · DRAW — Fan Spread
 ═══════════════════════════════════════════════ */
 #page-draw{
-  padding:44px 20px 80px;
-  gap:28px;
+  padding:36px 0 80px;
+  gap:20px;
+  overflow:hidden;
 }
 
 .draw-instruction{
@@ -392,10 +393,103 @@ html,body{
   max-width:300px;
   line-height:1.8;
   animation:fadeUp .6s ease both;
+  padding:0 20px;
 }
 .draw-instruction strong{
   color:#1A3A5A;
   font-style:normal;
+}
+
+/* Shuffle button area */
+.shuffle-area{
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  animation:fadeUp .5s .1s ease both;
+}
+
+/* Fan / spread area */
+.fan-area{
+  position:relative;
+  width:100%;
+  height:220px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  overflow:visible;
+}
+
+/* Each mini card in the fan */
+.fan-card{
+  position:absolute;
+  width:clamp(52px,13vw,70px);
+  aspect-ratio:2/3.5;
+  border-radius:7px;
+  overflow:hidden;
+  cursor:pointer;
+  transition:transform .25s ease, box-shadow .25s ease;
+  transform-origin:bottom center;
+  box-shadow:0 4px 12px rgba(0,0,0,.2), 0 0 0 1px rgba(26,80,160,.15);
+}
+.fan-card .card-back-img{
+  width:100%;height:100%;
+  border-radius:7px;
+}
+.fan-card:hover{
+  transform:var(--base-transform) translateY(-22px) !important;
+  box-shadow:0 12px 28px rgba(0,0,0,.3), 0 0 14px rgba(180,220,255,.5);
+  z-index:100 !important;
+}
+.fan-card.selected{
+  transform:var(--base-transform) translateY(-30px) !important;
+  box-shadow:0 14px 32px rgba(26,58,120,.35), 0 0 18px rgba(180,220,255,.6);
+  z-index:200 !important;
+}
+.fan-card.used{
+  opacity:.35;
+  pointer-events:none;
+  filter:grayscale(.5);
+}
+
+/* Selected cards row */
+.selected-slots{
+  display:flex;
+  gap:clamp(8px,2.5vw,16px);
+  justify-content:center;
+  flex-wrap:wrap;
+  padding:0 16px;
+  min-height:60px;
+  animation:fadeUp .5s .2s ease both;
+}
+.selected-slot-wrap{
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+}
+
+.btn-draw{
+  display:inline-flex;align-items:center;gap:10px;
+  background:linear-gradient(135deg,rgba(255,255,255,.6),rgba(220,240,255,.45));
+  border:1.5px solid rgba(26,80,160,.3);
+  color:#1A3A5A;
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(.95rem,3.5vw,1.15rem);
+  letter-spacing:.12em;
+  padding:14px 32px;
+  border-radius:36px;
+  cursor:pointer;
+  transition:all .3s ease;
+  backdrop-filter:blur(8px);
+  box-shadow:0 4px 16px rgba(26,58,120,.12);
+}
+.btn-draw:hover{
+  background:rgba(255,255,255,.75);
+  box-shadow:0 6px 24px rgba(26,58,120,.2), 0 0 16px rgba(180,220,255,.4);
+  transform:translateY(-2px);
+}
+.btn-draw:disabled{
+  opacity:.4;cursor:default;transform:none;
+}
+
+@keyframes fanSpread{
+  from{opacity:0;transform:var(--base-transform) translateY(40px);}
+  to{opacity:1;transform:var(--base-transform);}
 }
 
 /* Deck pile */
@@ -945,31 +1039,34 @@ html,body{
 
 <!-- ═══ PAGE 3: DRAW ══════════════════════════════════════════════ -->
 <div class="page" id="page-draw">
-  <div class="page-header" style="animation:fadeUp .5s ease both">
+  <div class="page-header" style="animation:fadeUp .5s ease both;padding:0 20px">
     <h2 id="draw-title">Draw Your Cards</h2>
     <p id="draw-subtitle">抽取你的牌</p>
   </div>
 
   <p class="draw-instruction" id="draw-instruction">
     深呼吸，讓心靜下來。<br>
-    <strong>點擊牌堆</strong>開始洗牌，<br>
-    再逐一點擊抽取每張牌。
+    點擊「洗牌」，再從牌面中<strong>挑選你的牌</strong>。
   </p>
 
-  <div class="deck-area">
-    <div class="deck-pile" id="deck-pile" onclick="handleDeckClick()">
-      <div class="deck-glow"></div>
-      <div class="deck-card" id="deck-c1"><div class="card-back-img" style="width:100%;height:100%"><svg viewBox="0 0 120 210" xmlns="http://www.w3.org/2000/svg" fill="none" style="width:100%;height:100%"><rect width="120" height="210" rx="10" fill="#1a1030"/><rect x="4" y="4" width="112" height="202" rx="8" stroke="#D4A843" stroke-width="1" opacity="0.45"/><circle cx="60" cy="105" r="40" stroke="#D4A843" stroke-width="0.8" opacity="0.3"/><circle cx="60" cy="105" r="27" stroke="#D4A843" stroke-width="0.6" opacity="0.22"/><path d="M60 65 L60 145 M20 105 L100 105 M31.7 76.7 L88.3 133.3 M88.3 76.7 L31.7 133.3" stroke="#D4A843" stroke-width="0.5" opacity="0.15"/><circle cx="60" cy="105" r="8" fill="#D4A843" opacity="0.32"/><circle cx="51" cy="94" r="4" fill="#D4A843" opacity="0.26"/><circle cx="60" cy="91" r="4" fill="#D4A843" opacity="0.26"/><circle cx="69" cy="94" r="4" fill="#D4A843" opacity="0.26"/><text x="60" y="192" text-anchor="middle" font-family="serif" font-size="6" fill="#D4A843" opacity="0.28" letter-spacing="1.5">© bluemonkey</text></svg></div></div>
-      <div class="deck-card" id="deck-c2"><div class="card-back-img" style="width:100%;height:100%"><svg viewBox="0 0 120 210" xmlns="http://www.w3.org/2000/svg" fill="none" style="width:100%;height:100%"><rect width="120" height="210" rx="10" fill="#1a1030"/><rect x="4" y="4" width="112" height="202" rx="8" stroke="#D4A843" stroke-width="1" opacity="0.45"/><circle cx="60" cy="105" r="40" stroke="#D4A843" stroke-width="0.8" opacity="0.3"/><circle cx="60" cy="105" r="27" stroke="#D4A843" stroke-width="0.6" opacity="0.22"/><path d="M60 65 L60 145 M20 105 L100 105" stroke="#D4A843" stroke-width="0.5" opacity="0.15"/><circle cx="60" cy="105" r="8" fill="#D4A843" opacity="0.32"/><circle cx="51" cy="94" r="4" fill="#D4A843" opacity="0.26"/><circle cx="60" cy="91" r="4" fill="#D4A843" opacity="0.26"/><circle cx="69" cy="94" r="4" fill="#D4A843" opacity="0.26"/><text x="60" y="192" text-anchor="middle" font-family="serif" font-size="6" fill="#D4A843" opacity="0.28" letter-spacing="1.5">© bluemonkey</text></svg></div></div>
-      <div class="deck-card" id="deck-c3"><div class="card-back-img" style="width:100%;height:100%"><svg viewBox="0 0 120 210" xmlns="http://www.w3.org/2000/svg" fill="none" style="width:100%;height:100%"><rect width="120" height="210" rx="10" fill="#1a1030"/><rect x="4" y="4" width="112" height="202" rx="8" stroke="#D4A843" stroke-width="1" opacity="0.45"/><circle cx="60" cy="105" r="40" stroke="#D4A843" stroke-width="0.8" opacity="0.3"/><circle cx="60" cy="105" r="27" stroke="#D4A843" stroke-width="0.6" opacity="0.22"/><path d="M60 65 L60 145 M20 105 L100 105 M31.7 76.7 L88.3 133.3 M88.3 76.7 L31.7 133.3" stroke="#D4A843" stroke-width="0.5" opacity="0.15"/><circle cx="60" cy="105" r="8" fill="#D4A843" opacity="0.32"/><circle cx="51" cy="94" r="4" fill="#D4A843" opacity="0.26"/><circle cx="60" cy="91" r="4" fill="#D4A843" opacity="0.26"/><circle cx="69" cy="94" r="4" fill="#D4A843" opacity="0.26"/><text x="60" y="192" text-anchor="middle" font-family="serif" font-size="6" fill="#D4A843" opacity="0.28" letter-spacing="1.5">© bluemonkey</text></svg></div></div>
-    </div>
+  <!-- Shuffle button -->
+  <div class="shuffle-area">
+    <button class="btn-draw" id="btn-shuffle" onclick="doShuffle()">
+      🐾 洗牌
+    </button>
   </div>
 
-  <div class="spread-slots" id="spread-slots"></div>
+  <!-- Fan spread -->
+  <div class="fan-area" id="fan-area"></div>
 
-  <button class="btn-draw" id="btn-draw" onclick="drawNextCard()" disabled>
-    <span>🌙</span> 抽取下一張牌
+  <!-- Selected cards -->
+  <div class="selected-slots" id="spread-slots"></div>
+
+  <!-- View reading button (hidden until enough cards) -->
+  <button class="btn-draw" id="btn-reading" onclick="showReading()" style="display:none">
+    ✨ 查看解讀
   </button>
+
   <button class="btn-back" onclick="goTo('page-spread')" style="margin-top:8px">← 重新選擇</button>
 </div>
 
@@ -1345,9 +1442,9 @@ const CARDS = [
    SPREAD CONFIGS
 ═══════════════════════════════════════════════ */
 const SPREAD_CONFIG = {
-  1: [{ en:'Today',   zh:'今日訊息' }],
-  3: [{ en:'Past',    zh:'過去' },{ en:'Present', zh:'現在' },{ en:'Future',  zh:'未來' }],
-  5: [{ en:'Situation',zh:'現況' },{ en:'Challenge',zh:'挑戰' },{ en:'Past',zh:'過去' },{ en:'Future',zh:'未來' },{ en:'Outcome',zh:'結果' }],
+  1: [{ en:'Today',     zh:'今日訊息' }],
+  3: [{ en:'Past',      zh:'過去' },{ en:'Present', zh:'現在' },{ en:'Future',  zh:'未來' }],
+  5: [{ en:'Situation', zh:'現況' },{ en:'Challenge',zh:'挑戰' },{ en:'Past',   zh:'過去' },{ en:'Future',  zh:'未來' },{ en:'Outcome', zh:'結果' }],
 };
 
 /* ═══════════════════════════════════════════════════
@@ -1355,9 +1452,7 @@ const SPREAD_CONFIG = {
 ═══════════════════════════════════════════════ */
 let currentSpreadCount = 1;
 let drawnCards = [];
-let drawnSlots = [];
-let deckShuffled = false;
-let drawnCount = 0;
+let shuffledDeck = [];
 let selectedCardIdx = null;
 
 /* ═══════════════════════════════════════════════════
@@ -1380,122 +1475,142 @@ function goTo(pageId) {
 function startReading(count) {
   currentSpreadCount = count;
   drawnCards = [];
-  drawnSlots = [];
-  deckShuffled = false;
-  drawnCount = 0;
+  shuffledDeck = [];
   selectedCardIdx = null;
 
-  // Set titles
-  const titles = { 1:'Draw Your Card', 3:'Three Card Spread', 5:'Five Card Spread' };
+  const titles    = { 1:'Draw Your Card', 3:'Three Card Spread', 5:'Five Card Spread' };
   const subtitles = { 1:'單張牌・今日訊息', 3:'三張牌・過去現在未來', 5:'五張牌・完整解讀' };
-  document.getElementById('draw-title').textContent = titles[count];
+  document.getElementById('draw-title').textContent    = titles[count];
   document.getElementById('draw-subtitle').textContent = subtitles[count];
 
-  // Build slots
+  // Build empty selected slots
   const slotsEl = document.getElementById('spread-slots');
-  const config = SPREAD_CONFIG[count];
-  slotsEl.innerHTML = config.map((s,i) => `
+  slotsEl.innerHTML = SPREAD_CONFIG[count].map((s,i) => `
     <div class="slot-wrap">
-      <div class="slot-label" style="color:#8B0000!important;font-weight:900!important;font-family:'Noto Serif TC',serif!important">${s.en}</div>
-      <div class="slot-label-zh" style="color:#8B0000!important;font-weight:700!important;font-family:'Noto Serif TC',serif!important">${s.zh}</div>
-      <div class="card-slot" id="slot-${i}">
-        <span class="slot-empty-icon">🌙</span>
-      </div>
+      <div class="slot-label" style="color:#8B0000;font-weight:900;font-family:'Noto Serif TC',serif">${s.en}</div>
+      <div class="slot-label-zh" style="color:#8B0000;font-weight:700;font-family:'Noto Serif TC',serif">${s.zh}</div>
+      <div class="card-slot" id="slot-${i}"><span class="slot-empty-icon">🌙</span></div>
     </div>
   `).join('');
 
-  document.getElementById('btn-draw').disabled = true;
-  document.getElementById('draw-instruction').innerHTML = `深呼吸，讓心靜下來。<br><strong>點擊牌堆</strong>開始洗牌。`;
+  // Reset fan
+  document.getElementById('fan-area').innerHTML = '';
+  document.getElementById('btn-reading').style.display = 'none';
+  document.getElementById('btn-shuffle').style.display = 'inline-flex';
+  document.getElementById('draw-instruction').innerHTML =
+    `深呼吸，讓心靜下來。<br>點擊「洗牌」，再從牌面中<strong>挑選你的牌</strong>。`;
 
   goTo('page-draw');
 }
 
 /* ═══════════════════════════════════════════════════
-   DECK INTERACTION
+   SHUFFLE → SPREAD FAN
 ═══════════════════════════════════════════════ */
-function handleDeckClick() {
-  if (!deckShuffled) {
-    shuffleDeck();
-  } else if (drawnCount < currentSpreadCount) {
-    drawNextCard();
-  }
-}
+function doShuffle() {
+  shuffledDeck = [...CARDS].sort(() => Math.random() - 0.5);
+  drawnCards = [];
 
-function shuffleDeck() {
-  deckShuffled = true;
-  const pile = document.getElementById('deck-pile');
-  pile.classList.add('shuffling');
-
-  // Shuffle animation on all three
-  ['deck-c1','deck-c2','deck-c3'].forEach((id,i) => {
-    const el = document.getElementById(id);
-    el.style.transition = 'transform .5s ease';
-    const delays = [0, 80, 160];
-    setTimeout(() => {
-      el.style.transform = `rotate(${(Math.random()-0.5)*24}deg) translate(${(Math.random()-0.5)*30}px,${(Math.random()-0.5)*20}px)`;
-    }, delays[i]);
-    setTimeout(() => {
-      el.style.transform = i===0 ? 'rotate(-3deg) translate(-5px,3px)' : i===1 ? 'rotate(-1deg) translate(-2px,1px)' : 'rotate(0)';
-      if (i===2) {
-        pile.classList.remove('shuffling');
-        document.getElementById('btn-draw').disabled = false;
-        document.getElementById('draw-instruction').innerHTML = `牌已洗好。<br><strong>點擊牌堆</strong>或按下方按鈕抽牌。`;
-        // Shuffle actual data
-        shuffledDeck = [...CARDS].sort(() => Math.random() - 0.5);
-      }
-    }, delays[i] + 600);
+  // Reset slots
+  SPREAD_CONFIG[currentSpreadCount].forEach((_,i) => {
+    const slot = document.getElementById(`slot-${i}`);
+    if (slot) slot.innerHTML = '<span class="slot-empty-icon">🌙</span>';
+    if (slot) slot.classList.remove('filled');
   });
+  document.getElementById('btn-reading').style.display = 'none';
+
+  // Animate shuffle button
+  const btnShuffle = document.getElementById('btn-shuffle');
+  btnShuffle.textContent = '✨ 洗牌中…';
+  btnShuffle.disabled = true;
+
+  // Build fan cards — show 18 cards spread in an arc
+  const fanEl = document.getElementById('fan-area');
+  fanEl.innerHTML = '';
+  const total = 18;
+  const spread = Math.min(90, 8 * total); // total arc degrees
+  const startAngle = -spread/2;
+  const screenW = window.innerWidth;
+  const radius = Math.min(screenW * 1.1, 520);
+
+  setTimeout(() => {
+    for (let i = 0; i < total; i++) {
+      const angle = startAngle + (spread / (total - 1)) * i;
+      const rad = (angle * Math.PI) / 180;
+      const tx = Math.sin(rad) * radius * 0.35;
+      const ty = -Math.cos(rad) * radius * 0.12 + 10;
+      const transform = `rotate(${angle * 0.7}deg) translate(${tx}px, ${ty}px)`;
+
+      const card = document.createElement('div');
+      card.className = 'fan-card';
+      card.dataset.idx = i;
+      card.style.setProperty('--base-transform', transform);
+      card.style.transform = transform;
+      card.style.zIndex = i;
+      card.style.left = '50%';
+      card.style.bottom = '0';
+      card.style.marginLeft = `calc(-${Math.min(52, screenW*0.13)/2}px)`;
+      card.style.animation = `fanSpread .4s ${i * 0.03}s ease both`;
+      card.innerHTML = `<div class="card-back-img"></div>`;
+      card.onclick = () => selectFanCard(i, card);
+      fanEl.appendChild(card);
+    }
+
+    btnShuffle.innerHTML = '🔄 重新洗牌';
+    btnShuffle.disabled = false;
+    btnShuffle.onclick = doShuffle;
+    document.getElementById('draw-instruction').innerHTML =
+      `牌已攤開，請直覺地點選<strong>第 ${drawnCards.length + 1} 張牌</strong>。`;
+  }, 600);
 }
 
-let shuffledDeck = [];
+/* ═══════════════════════════════════════════════════
+   SELECT A FAN CARD
+═══════════════════════════════════════════════ */
+function selectFanCard(idx, cardEl) {
+  if (drawnCards.length >= currentSpreadCount) return;
+  if (cardEl.classList.contains('used')) return;
 
-function drawNextCard() {
-  if (!deckShuffled || drawnCount >= currentSpreadCount) return;
-
-  const card = shuffledDeck[drawnCount];
-  const reversed = Math.random() < 0.1; // 10% chance reversed
+  const card     = shuffledDeck[idx];
+  const reversed = Math.random() < 0.1;
+  const slotIdx  = drawnCards.length;
   drawnCards.push({ card, reversed });
 
-  // Fill slot
-  const slot = document.getElementById(`slot-${drawnCount}`);
-  slot.classList.add('filled');
+  // Mark fan card as used
+  cardEl.classList.add('used');
 
-  const imgSrc = card.src;
+  // Fill the slot with flip animation
+  const slot    = document.getElementById(`slot-${slotIdx}`);
   const revClass = reversed ? 'reversed' : '';
-
+  slot.classList.add('filled');
   slot.innerHTML = `
     <div class="card-flip-wrap">
-      <div class="card-flip-inner" id="flip-${drawnCount}">
+      <div class="card-flip-inner" id="flip-${slotIdx}">
         <div class="card-flip-face">
           <div class="card-back-img" style="width:100%;height:100%"></div>
         </div>
         <div class="card-flip-back ${revClass}">
-          <img src="${imgSrc}" alt="${card.zh}" onerror="this.parentNode.innerHTML='<div class=\'card-placeholder\'><div class=\'card-placeholder-name\'>${card.roman}<br>${card.zh}</div></div>'">
+          <img src="${card.src}" alt="${card.zh}"
+               onerror="this.parentNode.innerHTML='<div class=\'card-placeholder\'><div class=\'card-placeholder-name\'>${card.roman}<br>${card.zh}</div></div>'">
         </div>
       </div>
-    </div>
-  `;
+    </div>`;
 
-  // Trigger flip after short delay
   setTimeout(() => {
-    document.getElementById(`flip-${drawnCount}`).classList.add('revealed');
-  }, 200);
+    const flip = document.getElementById(`flip-${slotIdx}`);
+    if (flip) flip.classList.add('revealed');
+  }, 150);
 
-  drawnCount++;
-
-  if (drawnCount >= currentSpreadCount) {
-    document.getElementById('btn-draw').disabled = true;
-    document.getElementById('draw-instruction').innerHTML = `✨ 所有的牌都已抽出。<br>點擊<strong>查看牌義解讀</strong>。`;
-
-    // Show reveal button after all drawn
-    setTimeout(() => {
-      const btn = document.getElementById('btn-draw');
-      btn.textContent = '✨ 查看解讀';
-      btn.disabled = false;
-      btn.onclick = showReading;
-    }, 800);
+  // Update instruction
+  const remaining = currentSpreadCount - drawnCards.length;
+  if (remaining > 0) {
+    document.getElementById('draw-instruction').innerHTML =
+      `已選 ${drawnCards.length} / ${currentSpreadCount} 張。<br>請繼續點選<strong>第 ${drawnCards.length + 1} 張牌</strong>。`;
   } else {
-    document.getElementById('draw-instruction').innerHTML = `已抽 ${drawnCount} / ${currentSpreadCount} 張。<br><strong>繼續點擊</strong>抽取下一張。`;
+    document.getElementById('draw-instruction').innerHTML =
+      `✨ 所有的牌都已選出。`;
+    setTimeout(() => {
+      document.getElementById('btn-reading').style.display = 'inline-flex';
+    }, 600);
   }
 }
 
